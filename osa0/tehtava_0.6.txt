@@ -5,3 +5,4 @@ selain suorittaa tapahtumakäsittelijän,
 joka lisää uuden muistiinpanon ja piirtää
 ruudun sisällön uudelleen, sekä lähettää
 uuden muistiinpanon palvelimelle
+end note
