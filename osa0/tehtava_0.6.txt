@@ -1,0 +1,7 @@
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note over selain:
+selain suorittaa tapahtumakäsittelijän,
+joka lisää uuden muistiinpanon ja piirtää
+ruudun sisällön uudelleen, sekä lähettää
+uuden muistiinpanon palvelimelle
