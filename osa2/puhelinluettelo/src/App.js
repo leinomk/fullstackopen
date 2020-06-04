@@ -138,7 +138,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Notification message={message} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} /> 
-      <h2>Add a new</h2>
+      <h2>Add a new contact</h2>
       <PersonForm
         addName={addName}
         newName={newName}
@@ -146,7 +146,7 @@ const App = () => {
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
       />
-      <h2>Numbers</h2>
+      <h2>Contacts</h2>
       <div>
         {personsToShow.map((person, i) => 
           <Person 
