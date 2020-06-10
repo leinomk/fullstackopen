@@ -12,7 +12,6 @@ const Notification = ({ message }) => {
     )
   }
   else {
-    console.log('Error happened')
     return (
       <div className="error">
         {message.text}

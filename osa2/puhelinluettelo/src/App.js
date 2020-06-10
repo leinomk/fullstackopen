@@ -26,64 +26,66 @@ const App = () => {
         .remove(person.id)
         .then(() => {
           const personRemoved = persons
-                                  .filter(contact => 
-                                    contact.id !== person.id)
+            .filter(contact =>
+              contact.id !== person.id)
           setPersons(personRemoved)
           const message = {
             text: `Removed ${person.name}`,
-            type: "notificationMessage"
+            type: 'notificationMessage'
           }
           console.log(message)
           setMessage(message)
           setTimeout(() => {
             setMessage({})
           }, 5000)
-      })
+        })
     }
   }
 
   const changeNumber = (contact) => {
     const message = `${contact.name} is already added to the phonebook, replace the old number with a new one?`
 
-    if (window.confirm(message)){
-      const changedContact = {...contact, number: newNumber.trim()}
+    if (window.confirm(message)) {
+      const changedContact = { ...contact, number: newNumber.trim() }
 
       personService
         .update(contact.id, changedContact)
         .then(returnedContact => {
           setPersons(persons.map(person => person.id !== contact.id
-                                                     ? person
-                                                     : returnedContact))
+            ? person
+            : returnedContact))
           const message = {
             text: `Number for ${contact.name} was changed`,
-            type: "notificationMessage"
+            type: 'notificationMessage'
           }
           setMessage(message)
           setTimeout(() => {
             setMessage({})
           }, 5000)
+          setNewName('')
+          setNewNumber('')
         })
         .catch(error => {
           const message = {
-            text: `Information of ${contact.name} has already been removed from server`,
-            type: "errorMessage"
+            text: ` ${error.response.data.error}`,
+            type: 'errorMessage'
           }
           setMessage(message)
           setTimeout(() => {
             setMessage({})
           }, 5000)
-          setPersons(persons.filter(p => p.id !== contact.id))
+          personService
+            .getAll()
+            .then(response => setPersons(response))
         })
-      setNewName('')
-      setNewNumber('')
     }
   }
 
   const addName = (event) => {
     event.preventDefault()
     const name = newName.trim()
-    
-    if ( name === "") {
+
+    if (name === '') {
       setNewName('')
     }
     else if (persons.findIndex(person => person.name === name) > -1) {
@@ -97,20 +99,31 @@ const App = () => {
 
       personService
         .create(personObject)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+        .then(createdPerson => {
+          setPersons(persons.concat(createdPerson))
           setNewName('')
           setNewNumber('')
           const message = {
             text: `Added ${personObject.name}`,
-            type: "notificationMessage"
+            type: 'notificationMessage'
           }
           setMessage(message)
           setTimeout(() => {
             setMessage({})
           }, 5000)
         })
-    } 
+        .catch(error => {
+          console.log(error.response)
+          const message = {
+            text: `${error.response.data.error}`,
+            type: 'errorMessage'
+          }
+          setMessage(message)
+          setTimeout(() => {
+            setMessage({})
+          }, 5000)
+        })
+    }
   }
 
   const handleNameChange = (event) => {
@@ -128,10 +141,10 @@ const App = () => {
   const personsToShow = (filter.trim() === "")
     ? persons
     : persons.filter(person => person.name
-                               .toLowerCase()
-                               .indexOf(filter
-                               .trim()
-                               .toLowerCase()) !== -1)
+      .toLowerCase()
+      .indexOf(filter
+        .trim()
+        .toLowerCase()) !== -1)
 
   return (
     <div>
@@ -148,8 +161,8 @@ const App = () => {
       />
       <h2>Contacts</h2>
       <div>
-        {personsToShow.map((person, i) => 
-          <Person 
+        {personsToShow.map((person, i) =>
+          <Person
             key={i}
             person={person}
             deletePerson={() => deleteContact(person)}
